@@ -1,0 +1,5 @@
+# Screenshots from test/debug runs
+*.png
+
+# Node
+node_modules/
