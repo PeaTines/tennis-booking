@@ -5,6 +5,16 @@
  */
 
 const { execFileSync } = require('child_process')
+const fs = require('fs')
+const path = require('path')
+
+const envPath = path.join(__dirname, '.env')
+if (fs.existsSync(envPath)) {
+  fs.readFileSync(envPath, 'utf-8').split('\n').forEach(line => {
+    const [key, ...rest] = line.trim().split('=')
+    if (key && rest.length) process.env[key] = rest.join('=')
+  })
+}
 
 const CHROME = '/home/openclaw/.cache/ms-playwright/chromium-1208/chrome-linux/chrome'
 
@@ -40,8 +50,8 @@ async function main() {
   // Login
   log('Logging in...')
   ab('open', 'https://ebookingonline.net/mobile/226')
-  ab('find', 'role', 'textbox', 'fill', '1550', '--name', 'User ID:')
-  ab('find', 'role', 'textbox', 'fill', 'Backhand69', '--name', 'Password:')
+  ab('find', 'role', 'textbox', 'fill', process.env.TENNIS_USER, '--name', 'User ID:')
+  ab('find', 'role', 'textbox', 'fill', process.env.TENNIS_PASS, '--name', 'Password:')
   ab('find', 'role', 'button', 'click', '--name', 'Login')
   await sleep(2000)
   log(`After login URL: ${ab('get', 'url')}`)

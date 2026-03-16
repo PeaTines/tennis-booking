@@ -10,13 +10,24 @@
  */
 
 const { execFileSync } = require('child_process')
+const fs = require('fs')
+const path = require('path')
+
+// Load .env from script directory
+const envPath = path.join(__dirname, '.env')
+if (fs.existsSync(envPath)) {
+  fs.readFileSync(envPath, 'utf-8').split('\n').forEach(line => {
+    const [key, ...rest] = line.trim().split('=')
+    if (key && rest.length) process.env[key] = rest.join('=')
+  })
+}
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const CHROME = '/home/openclaw/.cache/ms-playwright/chromium-1208/chrome-linux/chrome'
 const BASE_URL = 'https://ebookingonline.net/mobile/226'
-const USER = '1550'
-const PASS = 'Backhand69'
+const USER = process.env.TENNIS_USER || (() => { throw new Error('TENNIS_USER not set in .env') })()
+const PASS = process.env.TENNIS_PASS || (() => { throw new Error('TENNIS_PASS not set in .env') })()
 
 const COURTS = [
   [10, 'Court+2'],

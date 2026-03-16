@@ -1,3 +1,6 @@
+# Credentials — never commit this
+.env
+
 # Screenshots from test/debug runs
 *.png
 
